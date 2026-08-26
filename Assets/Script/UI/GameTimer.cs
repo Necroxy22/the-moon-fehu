@@ -19,7 +19,7 @@ public class GameTimer : MonoBehaviour
 
     void Update()
     {
-        if (!isRunning) return;
+        if (!isRunning || timerText == null) return;
 
         currentTime += Time.deltaTime;
 

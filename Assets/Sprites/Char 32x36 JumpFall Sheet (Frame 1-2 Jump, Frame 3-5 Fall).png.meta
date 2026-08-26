@@ -45,10 +45,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 30
+  spritePixelsToUnits: 256
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -69,10 +69,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -93,6 +93,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -102,8 +115,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 36
+        width: 677.3333
+        height: 938
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,10 +134,10 @@ TextureImporter:
       name: Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 677
         y: 0
-        width: 32
-        height: 36
+        width: 677.3333
+        height: 938
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,10 +155,10 @@ TextureImporter:
       name: Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 1354
         y: 0
-        width: 32
-        height: 36
+        width: 677.3333
+        height: 938
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,48 +168,6 @@ TextureImporter:
       bones: []
       spriteID: b0cbe17679e275f4b9ad7e9b481a792c
       internalID: 384831427
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_3
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0e08b54c1456dda46aa1468d73796a8e
-      internalID: -337991240
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_4
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 32
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a5ed2441afc645745bb0e5569a861f1e
-      internalID: 776760816
       vertices: []
       indices: 
       edges: []
@@ -215,8 +186,6 @@ TextureImporter:
       Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_0: -1303018664
       Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_1: -1205130688
       Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_2: 384831427
-      Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_3: -337991240
-      Char 32x36 JumpFall Sheet (Frame 1-2 Jump, Frame 3-5 Fall)_4: 776760816
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -28,8 +28,12 @@ public class GameOver_Manager : MonoBehaviour
         
         Time.timeScale = 0f;
 
-        float finalTime = GameTimer.Instance.GetTime();
-        GameTimer.Instance.StopTimer();
+        float finalTime = 0f;
+        if (GameTimer.Instance != null)
+        {
+            finalTime = GameTimer.Instance.GetTime();
+            GameTimer.Instance.StopTimer();
+        }
 
         float savedHighscore = PlayerPrefs.GetFloat(HighscoreKey, 0f);
 
@@ -40,8 +44,11 @@ public class GameOver_Manager : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        finalTimeText.text = "Time: " + FormatTime(finalTime);
-        highscoreText.text = "Best: " + FormatTime(savedHighscore);
+        if (finalTimeText != null)
+            finalTimeText.text = "Time: " + FormatTime(finalTime);
+
+        if (highscoreText != null)
+            highscoreText.text = "Best: " + FormatTime(savedHighscore);
     }
 
     private string FormatTime(float t)

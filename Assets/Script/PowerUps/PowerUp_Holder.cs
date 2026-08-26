@@ -29,12 +29,21 @@ public class PowerUp_Holder : MonoBehaviour
         if (type == null)
         {
             icon.sprite = null;
-            icon.color = emptyColor;
+            icon.enabled = false;
             return;
         }
 
-        icon.sprite = GetSprite(type.Value);
-        icon.color = filledColor;
+        Sprite sprite = GetSprite(type.Value);
+        if (sprite != null)
+        {
+            icon.sprite = sprite;
+            icon.color = filledColor;
+            icon.enabled = true;
+        }
+        else
+        {
+            icon.enabled = false;
+        }
     }
 
     private Sprite GetSprite(PowerUpType type)

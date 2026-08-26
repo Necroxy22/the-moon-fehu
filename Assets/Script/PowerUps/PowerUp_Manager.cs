@@ -36,6 +36,9 @@ public class PowerUp_Manager : MonoBehaviour
 
     public bool TryStore(PowerUpType type)
     {
+        if (playerController != null && (playerController.IsInvulnerable || playerController.IsDead))
+            return false;
+
         if (slot0 == null)
         {
             slot0 = type;
@@ -55,6 +58,9 @@ public class PowerUp_Manager : MonoBehaviour
 
     private void UseSlot(int slotIndex)
     {
+        if (playerController != null && (playerController.IsInvulnerable || playerController.IsDead))
+            return;
+
         PowerUpType? type = slotIndex == 0 ? slot0 : slot1;
 
         if (type == null)
@@ -144,9 +150,6 @@ public class PowerUp_Manager : MonoBehaviour
 
     private void RefreshUI()
     {
-        // if (holderUI != null)
-        //     holderUI.SetSlots(slot0, slot1);
-
         try
         {
             if (holderUI != null)

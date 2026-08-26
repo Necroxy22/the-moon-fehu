@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     private int currentHealth;
     public float invulnerabilityTime = 2f;
     private bool isInvulnerable = false;
+    public bool IsInvulnerable => isInvulnerable;
+    public bool IsDead => isDead;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
 
@@ -24,13 +26,13 @@ public class PlayerController : MonoBehaviour
     public float deathAnimationFallbackDuration = 1f;
 
     private bool isDead = false;
+    private bool isFalling = false;
 
     private int extraJumpsAvailable = 0;
     private int extraJumpsUsed = 0;
 
     private PowerUp_Manager powerUpManager;
 
-    // audio
     private AudioSource playerAudio;
     public AudioClip jumpSound;
     public AudioClip crashSound;
@@ -61,30 +63,61 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (isDead)
-            return;
+        {
+            if (isFalling)
+            {
+                if (rb.velocity.y < 0)
+                {
+                    rb.velocity += Vector2.up *
+                        Physics2D.gravity.y *
+                        (fallMultiplier - 1) *
+                        Time.deltaTime;
+                }
 
-        isGrounded = Physics2D.OverlapCircle(
-            groundCheck.position,
-            groundCheckRadius,
-            groundLayer
-        );
+                bool grounded = Physics2D.OverlapCircle(
+                    groundCheck.position,
+                    groundCheckRadius,
+                    groundLayer
+                );
+
+                if (grounded && rb.velocity.y <= 0.1f)
+                {
+                    isFalling = false;
+
+                    rb.velocity = Vector2.zero;
+                    rb.bodyType = RigidbodyType2D.Static;
+
+                    animator.SetTrigger("Death");
+                }
+            }
+            return;
+        }
+
+        if (groundCheck != null)
+        {
+            isGrounded = Physics2D.OverlapCircle(
+                groundCheck.position,
+                groundCheckRadius,
+                groundLayer
+            );
+        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isGrounded)
             {
                 Jump();
-                animator.SetTrigger("Jump");
+                if (animator != null) animator.SetTrigger("Jump");
                 extraJumpsUsed = 0;
-                playerAudio.PlayOneShot(jumpSound, 1f);
+                PlaySound(jumpSound, 1f);
             }
             else if (extraJumpsUsed < extraJumpsAvailable)
             {
                 Jump();
-                animator.SetTrigger("Jump");
+                if (animator != null) animator.SetTrigger("Jump");
                 extraJumpsUsed++;
                 extraJumpsAvailable = 0;
-                playerAudio.PlayOneShot(jumpSound, 1f);
+                PlaySound(jumpSound, 1f);
             }
         }
 
@@ -163,26 +196,33 @@ public class PlayerController : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        isFalling = true;
 
-        rb.velocity = Vector2.zero;
-        rb.bodyType = RigidbodyType2D.Static;
+        if (rb != null)
+        {
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+        }
 
-        animator.SetTrigger("Death");
-        playerAudio.PlayOneShot(crashSound, 1f);
+        PlaySound(crashSound, 1f);
 
         StartCoroutine(DeathSequence());
     }
 
     IEnumerator DeathSequence()
     {
+        yield return new WaitUntil(() => !isFalling);
+
         yield return null;
 
         float clipLength = deathAnimationFallbackDuration;
 
-        AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
-        if (clipInfo.Length > 0)
+        if (animator != null)
         {
-            clipLength = clipInfo[0].clip.length;
+            AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
+            if (clipInfo.Length > 0 && clipInfo[0].clip != null)
+            {
+                clipLength = clipInfo[0].clip.length;
+            }
         }
 
         Time.timeScale = 0f;
@@ -198,7 +238,17 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (isDead)
+        {
+            if (collision.gameObject.CompareTag("Obstacle"))
+            {
+                Collider2D myCollider = GetComponent<Collider2D>();
+                if (myCollider != null && collision.collider != null)
+                {
+                    Physics2D.IgnoreCollision(myCollider, collision.collider, true);
+                }
+            }
             return;
+        }
 
         if (collision.gameObject.CompareTag("Obstacle"))
         {
@@ -226,7 +276,15 @@ public class PlayerController : MonoBehaviour
 
     public void PlayItemSound()
     {
-        playerAudio.PlayOneShot(itemSound, 0.8f);
+        PlaySound(itemSound, 0.8f);
+    }
+
+    private void PlaySound(AudioClip clip, float volume = 1f)
+    {
+        if (playerAudio != null && clip != null)
+        {
+            playerAudio.PlayOneShot(clip, volume);
+        }
     }
 
     public int GetCurrentHP()

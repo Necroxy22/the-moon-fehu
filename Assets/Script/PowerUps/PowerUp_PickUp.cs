@@ -18,7 +18,11 @@ public class PowerUpPickup : MonoBehaviour
         PowerUp_Manager manager = other.GetComponent<PowerUp_Manager>();
         if (manager != null)
         {
-            manager.TryStore(type);
+            bool stored = manager.TryStore(type);
+            if (!stored)
+            {
+                return;
+            }
         }
 
         PlayerController player = other.GetComponent<PlayerController>();

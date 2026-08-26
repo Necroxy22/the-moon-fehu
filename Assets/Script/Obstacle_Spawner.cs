@@ -21,8 +21,14 @@ public class Obstacle_Spawner : MonoBehaviour
 
     private void SpawnObstacle()
     {
+        if (obstacles == null || obstacles.Length == 0)
+            return;
+
         int randomIndex = Random.Range(0, obstacles.Length);
         GameObject prefab = obstacles[randomIndex];
+
+        if (prefab == null)
+            return;
 
         float bottomOffset = GetBottomOffset(prefab);
 

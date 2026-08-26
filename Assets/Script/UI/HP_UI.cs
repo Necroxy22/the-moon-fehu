@@ -10,6 +10,9 @@ public class HP_UI : MonoBehaviour
 
     void Update()
     {
+        if (player == null || hpText == null)
+            return;
+
         hpText.text = player.GetCurrentHP() + " / " + player.maxHealth;
     }
 }
