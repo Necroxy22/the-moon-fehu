@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (isGrounded)
+            if(isGrounded)
             {
                 Jump();
                 if (animator != null) animator.SetTrigger("Jump");
@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (extraJumpsUsed < extraJumpsAvailable)
             {
+                //tastistus
                 Jump();
                 if (animator != null) animator.SetTrigger("Jump");
                 extraJumpsUsed++;
