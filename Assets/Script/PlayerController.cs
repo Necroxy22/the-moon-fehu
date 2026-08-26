@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (extraJumpsUsed < extraJumpsAvailable)
             {
-                //tastistus
+                //tastistustajitaj
                 Jump();
                 if (animator != null) animator.SetTrigger("Jump");
                 extraJumpsUsed++;
