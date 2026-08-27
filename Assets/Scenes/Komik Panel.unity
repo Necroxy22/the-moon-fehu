@@ -203,6 +203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afc5975e3e316a74f8090da905e8062c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  videoPlayer: {fileID: 257910920}
+  panelVideo: {fileID: 1116168514}
   panelAkhir: {fileID: 553984783}
 --- !u!1 &320147117
 GameObject:
@@ -881,7 +883,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 666798084}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ToGamelay, Assembly-CSharp
         m_MethodName: PlayGame
         m_Mode: 1

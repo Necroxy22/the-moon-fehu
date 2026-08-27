@@ -6,11 +6,12 @@ using UnityEngine.SceneManagement;
 public class ToGamelay : MonoBehaviour
 {
     public string gameSceneName = "SampleScene";
+    public GameObject panelAkhir;
 
     void Update()
     {
-        // Panah kanan → masuk ke Game
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        // Panah kanan hanya berfungsi ketika Panel Akhir sudah muncul
+        if (panelAkhir.activeSelf && Input.GetKeyDown(KeyCode.RightArrow))
         {
             PlayGame();
         }
@@ -19,6 +20,9 @@ public class ToGamelay : MonoBehaviour
     public void PlayGame()
     {
         Time.timeScale = 1f;
+
+        VideoToPanel.sudahPernahMain = true;
+
         SceneManager.LoadScene(gameSceneName);
     }
 }
