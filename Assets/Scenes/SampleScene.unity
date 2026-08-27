@@ -6845,8 +6845,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11f0a200fc848e4fb3b55b4a58b6d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  finalTimeText: {fileID: 0}
-  highscoreText: {fileID: 0}
+  finalTimeText: {fileID: 2007130433}
+  highscoreText: {fileID: 285864072}
   gameSceneName: SampleScene
   menuSceneName: Title_Screen
 --- !u!1660057539 &9223372036854775807
