@@ -5,14 +5,21 @@ using UnityEngine;
 public class Obstacle_Spawner : MonoBehaviour
 {
     public GameObject[] obstacles;
-    public float spawnRate = 2f;
+    public float spawnRate = 2.5f;
     private float timer;
+
+    private int lastSpawnedIndex = -1;
+    private int consecutiveCount = 0;
 
     void Update()
     {
         timer += Time.deltaTime;
 
-        if (timer >= spawnRate)
+        float currentSpawnRate = DifficultyManager.Instance != null 
+            ? DifficultyManager.Instance.CurrentObstacleSpawnRate 
+            : spawnRate;
+
+        if (timer >= currentSpawnRate)
         {
             timer = 0;
             SpawnObstacle();
@@ -25,6 +32,22 @@ public class Obstacle_Spawner : MonoBehaviour
             return;
 
         int randomIndex = Random.Range(0, obstacles.Length);
+
+        if (randomIndex == lastSpawnedIndex)
+        {
+            consecutiveCount++;
+            if (consecutiveCount >= 2 && obstacles.Length > 1)
+            {
+                randomIndex = (randomIndex + 1) % obstacles.Length;
+                consecutiveCount = 1;
+            }
+        }
+        else
+        {
+            lastSpawnedIndex = randomIndex;
+            consecutiveCount = 1;
+        }
+
         GameObject prefab = obstacles[randomIndex];
 
         if (prefab == null)

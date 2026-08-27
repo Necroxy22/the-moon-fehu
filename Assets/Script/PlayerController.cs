@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     private int extraJumpsAvailable = 0;
     private int extraJumpsUsed = 0;
-
+    public bool HasExtraJump => extraJumpsAvailable > 0;
     private PowerUp_Manager powerUpManager;
 
     private AudioSource playerAudio;
@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
+        Debug.Log("Jump() called at " + Time.time);
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
@@ -66,7 +67,7 @@ public class PlayerController : MonoBehaviour
         {
             if (isFalling)
             {
-                if (rb.velocity.y < 0)
+                if (rb != null && rb.velocity.y < 0)
                 {
                     rb.velocity += Vector2.up *
                         Physics2D.gravity.y *
@@ -74,20 +75,26 @@ public class PlayerController : MonoBehaviour
                         Time.deltaTime;
                 }
 
-                bool grounded = Physics2D.OverlapCircle(
+                bool grounded = groundCheck != null && Physics2D.OverlapCircle(
                     groundCheck.position,
                     groundCheckRadius,
                     groundLayer
                 );
 
-                if (grounded && rb.velocity.y <= 0.1f)
+                if (grounded && (rb == null || rb.velocity.y <= 0.1f))
                 {
                     isFalling = false;
 
-                    rb.velocity = Vector2.zero;
-                    rb.bodyType = RigidbodyType2D.Static;
+                    if (rb != null)
+                    {
+                        rb.velocity = Vector2.zero;
+                        rb.bodyType = RigidbodyType2D.Static;
+                    }
 
-                    animator.SetTrigger("Death");
+                    if (animator != null)
+                    {
+                        animator.SetTrigger("Death");
+                    }
                 }
             }
             return;
@@ -102,22 +109,21 @@ public class PlayerController : MonoBehaviour
             );
         }
 
+
+        bool canDoubleJump = (powerUpManager != null && powerUpManager.HasHermesEffect) || (extraJumpsAvailable > 0);
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(isGrounded)
+            if (isGrounded)
             {
                 Jump();
-                if (animator != null) animator.SetTrigger("Jump");
                 extraJumpsUsed = 0;
                 PlaySound(jumpSound, 1f);
             }
-            else if (extraJumpsUsed < extraJumpsAvailable)
+            else if (canDoubleJump && extraJumpsUsed < 1)
             {
-                //tastistustajitaj
                 Jump();
-                if (animator != null) animator.SetTrigger("Jump");
                 extraJumpsUsed++;
-                extraJumpsAvailable = 0;
                 PlaySound(jumpSound, 1f);
             }
         }
@@ -136,6 +142,43 @@ public class PlayerController : MonoBehaviour
                 rb.velocity.x,
                 rb.velocity.y * 0.5f
             );
+        }
+
+        UpdateCharacterAnimation();
+    }
+
+    private void UpdateCharacterAnimation()
+    {
+        if (animator == null || isDead) return;
+
+        bool isJumpingUp = !isGrounded && rb != null && rb.velocity.y > 0.1f;
+
+        string targetAnim = "Run";
+
+        if (powerUpManager != null && powerUpManager.ActiveHeldPowerUp != null)
+        {
+            PowerUpType held = powerUpManager.ActiveHeldPowerUp.Value;
+            switch (held)
+            {
+                case PowerUpType.Zeus:
+                    targetAnim = isJumpingUp ? "JumpWithBintang" : "RunWithBintang";
+                    break;
+                case PowerUpType.Athena:
+                    targetAnim = isJumpingUp ? "JumpWithShield" : "RunWithShield";
+                    break;
+                case PowerUpType.Hermes:
+                    targetAnim = isJumpingUp ? "JumpWithSepatu" : "RunWithSepatu";
+                    break;
+            }
+        }
+        else
+        {
+            targetAnim = isJumpingUp ? "Jump" : "Run";
+        }
+
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName(targetAnim))
+        {
+            animator.Play(targetAnim);
         }
 
         animator.SetBool("IsGrounded", isGrounded);
@@ -176,11 +219,11 @@ public class PlayerController : MonoBehaviour
         if (isInvulnerable || isDead)
             return;
 
-        if (powerUpManager != null && powerUpManager.HasShield)
-        {
-            powerUpManager.ConsumeShield();
-            return;
-        }
+        // if (powerUpManager != null && powerUpManager.HasShield)
+        // {
+        //     powerUpManager.ConsumeShield();
+        //     return;
+        // }
 
         currentHealth -= damage;
 
@@ -190,6 +233,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            PlaySound(damageSound, 1f);
             StartCoroutine(InvulnerabilityCoroutine());
         }
     }
@@ -201,7 +245,10 @@ public class PlayerController : MonoBehaviour
 
         if (rb != null)
         {
-            rb.velocity = new Vector2(0f, rb.velocity.y);
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.gravityScale = 4f;
+
+            rb.velocity = new Vector2(0f, Mathf.Min(rb.velocity.y, -0.5f));
         }
 
         PlaySound(crashSound, 1f);
@@ -219,6 +266,8 @@ public class PlayerController : MonoBehaviour
 
         if (animator != null)
         {
+            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+
             AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
             if (clipInfo.Length > 0 && clipInfo[0].clip != null)
             {
@@ -275,12 +324,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PlayItemSound()
-    {
-        PlaySound(itemSound, 0.8f);
-    }
-
-    private void PlaySound(AudioClip clip, float volume = 1f)
+    public void PlaySound(AudioClip clip, float volume = 1f)
     {
         if (playerAudio != null && clip != null)
         {

@@ -35,6 +35,8 @@ public class GameOver_Manager : MonoBehaviour
             GameTimer.Instance.StopTimer();
         }
 
+        HistoryManager.SaveHistory(finalTime);
+
         float savedHighscore = PlayerPrefs.GetFloat(HighscoreKey, 0f);
 
         if (finalTime > savedHighscore)

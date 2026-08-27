@@ -28,7 +28,7 @@ public class PowerUpPickup : MonoBehaviour
         PlayerController player = other.GetComponent<PlayerController>();
         if (player != null)
         {
-            player.PlayItemSound();
+            player.PlaySound(player.itemSound, 1f);
         }
 
         Destroy(gameObject);

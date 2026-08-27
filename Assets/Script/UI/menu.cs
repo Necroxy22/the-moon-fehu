@@ -7,14 +7,12 @@ public class menu : MonoBehaviour
 {
     public GameObject menupanel;
     public GameObject creditpanel;
-    // Start is called before the first frame update
     void Start()
     {
         menupanel.SetActive(true);
         creditpanel.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         

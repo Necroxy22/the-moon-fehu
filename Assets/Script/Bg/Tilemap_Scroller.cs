@@ -10,7 +10,8 @@ public class Tilemap_Scroller : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector2.left * speed * Time.deltaTime);
+        float currentSpeed = DifficultyManager.Instance != null ? DifficultyManager.Instance.CurrentSpeed : speed;
+        transform.Translate(Vector2.left * currentSpeed * Time.deltaTime);
 
         if (transform.position.x <= resetPositionX)
         {

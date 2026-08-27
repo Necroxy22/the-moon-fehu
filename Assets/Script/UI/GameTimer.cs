@@ -12,9 +12,17 @@ public class GameTimer : MonoBehaviour
 
     private float currentTime = 0f;
 
+    private int lastSeconds = -1;
+
     void Awake()
     {
         Instance = this;
+
+        if (DifficultyManager.Instance == null)
+        {
+            GameObject dmObj = new GameObject("DifficultyManager");
+            dmObj.AddComponent<DifficultyManager>();
+        }
     }
 
     void Update()
@@ -23,9 +31,14 @@ public class GameTimer : MonoBehaviour
 
         currentTime += Time.deltaTime;
 
-        int minutes = (int)(currentTime / 60);
-        int seconds = (int)(currentTime % 60);
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        int totalSeconds = (int)currentTime;
+        if (totalSeconds != lastSeconds)
+        {
+            lastSeconds = totalSeconds;
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
     }
 
     public void StopTimer() => isRunning = false;
