@@ -38,6 +38,7 @@ public class PowerUp_Holder : MonoBehaviour
         {
             icon.sprite = sprite;
             icon.color = filledColor;
+            icon.preserveAspect = true;
             icon.enabled = true;
         }
         else

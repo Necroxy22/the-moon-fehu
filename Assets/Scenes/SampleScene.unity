@@ -214,9 +214,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slot0Icon: {fileID: 1775918186}
   slot1Icon: {fileID: 1026472821}
-  hermesSprite: {fileID: -1304810850, guid: 3426cd46aa6fdd34190160a9de60c5b3, type: 3}
-  athenaSprite: {fileID: 2135908301, guid: 3426cd46aa6fdd34190160a9de60c5b3, type: 3}
-  zeusSprite: {fileID: -352554606, guid: 3426cd46aa6fdd34190160a9de60c5b3, type: 3}
+  hermesSprite: {fileID: -755111676, guid: 37b230abfb309f84fb61995c1d506b52, type: 3}
+  athenaSprite: {fileID: 21300000, guid: 6eda9c9473c14ed4a844f58e2f0db1f7, type: 3}
+  zeusSprite: {fileID: 21300000, guid: 274954f9fc1499f41af065c45f914e79, type: 3}
   emptyColor: {r: 1, g: 1, b: 1, a: 0.15}
   filledColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &118717638

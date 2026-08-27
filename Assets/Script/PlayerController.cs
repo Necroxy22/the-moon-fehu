@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
     private int extraJumpsAvailable = 0;
     private int extraJumpsUsed = 0;
-
+    public bool HasExtraJump => extraJumpsAvailable > 0;
     private PowerUp_Manager powerUpManager;
 
     private AudioSource playerAudio;
@@ -38,7 +38,6 @@ public class PlayerController : MonoBehaviour
     public AudioClip crashSound;
     public AudioClip damageSound;
     public AudioClip itemSound;
-    
 
     void Start()
     {
@@ -111,19 +110,20 @@ public class PlayerController : MonoBehaviour
         }
 
 
+        bool canDoubleJump = (powerUpManager != null && powerUpManager.HasHermesEffect) || (extraJumpsAvailable > 0);
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(isGrounded)
+            if (isGrounded)
             {
                 Jump();
                 extraJumpsUsed = 0;
                 PlaySound(jumpSound, 1f);
             }
-            else if (extraJumpsUsed < extraJumpsAvailable)
+            else if (canDoubleJump && extraJumpsUsed < 1)
             {
                 Jump();
                 extraJumpsUsed++;
-                extraJumpsAvailable = 0;
                 PlaySound(jumpSound, 1f);
             }
         }
@@ -151,7 +151,8 @@ public class PlayerController : MonoBehaviour
     {
         if (animator == null || isDead) return;
 
-        // Tentukan animasi yang seharusnya aktif berdasarkan item dan status grounded
+        bool isJumpingUp = !isGrounded && rb != null && rb.velocity.y > 0.1f;
+
         string targetAnim = "Run";
 
         if (powerUpManager != null && powerUpManager.ActiveHeldPowerUp != null)
@@ -160,29 +161,26 @@ public class PlayerController : MonoBehaviour
             switch (held)
             {
                 case PowerUpType.Zeus:
-                    targetAnim = isGrounded ? "RunWithBintang" : "JumpWithBintang";
+                    targetAnim = isJumpingUp ? "JumpWithBintang" : "RunWithBintang";
                     break;
                 case PowerUpType.Athena:
-                    targetAnim = isGrounded ? "RunWithShield" : "JumpWithShield";
+                    targetAnim = isJumpingUp ? "JumpWithShield" : "RunWithShield";
                     break;
                 case PowerUpType.Hermes:
-                    targetAnim = isGrounded ? "RunWithSepatu" : "JumpWithSepatu";
+                    targetAnim = isJumpingUp ? "JumpWithSepatu" : "RunWithSepatu";
                     break;
             }
         }
         else
         {
-            // Tidak memegang power-up apa pun (Karakter Biasa)
-            targetAnim = isGrounded ? "Run" : "Jump";
+            targetAnim = isJumpingUp ? "Jump" : "Run";
         }
 
-        // Putar animasi target hanya jika state animator sekarang berbeda (agar tidak reset frame tiap detik)
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName(targetAnim))
         {
             animator.Play(targetAnim);
         }
 
-        // Sinkronkan parameter untuk kompatibilitas animator controller
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("VerticalVelocity", rb.velocity.y);
     }
@@ -221,11 +219,11 @@ public class PlayerController : MonoBehaviour
         if (isInvulnerable || isDead)
             return;
 
-        if (powerUpManager != null && powerUpManager.HasShield)
-        {
-            powerUpManager.ConsumeShield();
-            return;
-        }
+        // if (powerUpManager != null && powerUpManager.HasShield)
+        // {
+        //     powerUpManager.ConsumeShield();
+        //     return;
+        // }
 
         currentHealth -= damage;
 
@@ -235,6 +233,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            PlaySound(damageSound, 1f);
             StartCoroutine(InvulnerabilityCoroutine());
         }
     }
@@ -246,12 +245,9 @@ public class PlayerController : MonoBehaviour
 
         if (rb != null)
         {
-            // Pastikan Rigidbody Dynamic dan gravity aktif
             rb.bodyType = RigidbodyType2D.Dynamic;
-            rb.gravityScale = 4f; // pakai default gravity, bisa disesuaikan
+            rb.gravityScale = 4f;
 
-            // Paksa velocity ke bawah supaya fall logic langsung aktif
-            // (mencegah freeze kalau player mati pas lagi di ground)
             rb.velocity = new Vector2(0f, Mathf.Min(rb.velocity.y, -0.5f));
         }
 
@@ -270,6 +266,8 @@ public class PlayerController : MonoBehaviour
 
         if (animator != null)
         {
+            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+
             AnimatorClipInfo[] clipInfo = animator.GetCurrentAnimatorClipInfo(0);
             if (clipInfo.Length > 0 && clipInfo[0].clip != null)
             {
@@ -326,12 +324,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PlayItemSound()
-    {
-        PlaySound(itemSound, 0.8f);
-    }
-
-    private void PlaySound(AudioClip clip, float volume = 1f)
+    public void PlaySound(AudioClip clip, float volume = 1f)
     {
         if (playerAudio != null && clip != null)
         {

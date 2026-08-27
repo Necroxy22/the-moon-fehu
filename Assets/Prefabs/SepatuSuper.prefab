@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 305736257853275480}
   - component: {fileID: 5842800094394026716}
   m_Layer: 0
-  m_Name: Hermes_Boots
+  m_Name: SepatuSuper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1304810850, guid: 3426cd46aa6fdd34190160a9de60c5b3, type: 3}
+  m_Sprite: {fileID: -755111676, guid: 37b230abfb309f84fb61995c1d506b52, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -124,7 +124,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.0666667, y: 1.0666667}
+    oldSize: {x: 39.603226, y: 21.599998}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

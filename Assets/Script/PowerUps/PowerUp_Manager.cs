@@ -10,35 +10,50 @@ public class PowerUp_Manager : MonoBehaviour
     public float zeusDestroyWidth = 1.5f;
     public string obstacleTag = "Obstacle";
 
-    public float athenaDuration = 30f;
+    public float athenaDuration = 20f;
     private bool athenaShieldActive = false;
     private Coroutine athenaTimerRoutine;
 
+    public GameObject bubbleShieldOverlay;
+
+    public float hermesDuration = 10f;
+    private bool hermesActive = false;
+    private Coroutine hermesTimerRoutine;
+
     public PowerUp_Holder holderUI;
     public bool HasShield => athenaShieldActive;
+    public bool HasHermesEffect => hermesActive;
     public float useAnimationDuration = 0.5f;
     private PowerUpType? currentlyUsing = null;
     private Coroutine useAnimationRoutine;
-
+    public AudioClip BubbleEffect;
+    public AudioClip StarEffect;
     public PowerUpType? CurrentlyUsing => currentlyUsing;
     public bool HasZeusInInventory => slot0 == PowerUpType.Zeus || slot1 == PowerUpType.Zeus;
     public bool HasAthenaInInventory => slot0 == PowerUpType.Athena || slot1 == PowerUpType.Athena || athenaShieldActive;
-    public bool HasHermesInInventory => slot0 == PowerUpType.Hermes || slot1 == PowerUpType.Hermes;
+    public bool HasHermesInInventory => slot0 == PowerUpType.Hermes || slot1 == PowerUpType.Hermes || hermesActive;
     public PowerUpType? ActiveHeldPowerUp
     {
         get
         {
-            if (slot0 != null) return slot0.Value;
-            if (slot1 != null) return slot1.Value;
-            if (athenaShieldActive) return PowerUpType.Athena;
+            if (slot0 == PowerUpType.Zeus || slot1 == PowerUpType.Zeus) 
+                return PowerUpType.Zeus;
+
+            if (hermesActive) 
+                return PowerUpType.Hermes;
+
             return null;
         }
     }
+        
     private PlayerController playerController;
 
     void Start()
     {
         playerController = GetComponent<PlayerController>();
+        if (bubbleShieldOverlay != null)
+            bubbleShieldOverlay.SetActive(false);
+
         RefreshUI();
     }
 
@@ -54,6 +69,12 @@ public class PowerUp_Manager : MonoBehaviour
     public bool TryStore(PowerUpType type)
     {
         if (playerController != null && (playerController.IsInvulnerable || playerController.IsDead))
+            return false;
+
+        if (athenaShieldActive || hermesActive)
+            return false;
+
+        if (slot0 == type || slot1 == type)
             return false;
 
         if (slot0 == null)
@@ -76,6 +97,9 @@ public class PowerUp_Manager : MonoBehaviour
     private void UseSlot(int slotIndex)
     {
         if (playerController != null && (playerController.IsInvulnerable || playerController.IsDead))
+            return;
+
+        if (athenaShieldActive || hermesActive)
             return;
 
         PowerUpType? type = slotIndex == 0 ? slot0 : slot1;
@@ -130,8 +154,18 @@ public class PowerUp_Manager : MonoBehaviour
 
     private void ActivateHermes()
     {
-        if (playerController != null)
-            playerController.GrantDoubleJump();
+        if (hermesTimerRoutine != null)
+            StopCoroutine(hermesTimerRoutine);
+
+        hermesActive = true;
+        hermesTimerRoutine = StartCoroutine(HermesTimer());
+    }
+
+    private IEnumerator HermesTimer()
+    {
+        yield return new WaitForSeconds(hermesDuration);
+        hermesActive = false;
+        hermesTimerRoutine = null;
     }
 
     private void ActivateAthena()
@@ -140,7 +174,12 @@ public class PowerUp_Manager : MonoBehaviour
             StopCoroutine(athenaTimerRoutine);
 
         athenaShieldActive = true;
-        Debug.Log("Athena shield activated for " + athenaDuration + " seconds.");
+        if (bubbleShieldOverlay != null)
+        {
+            bubbleShieldOverlay.SetActive(true);
+            playerController.PlaySound(BubbleEffect, 1f);
+        }
+
         athenaTimerRoutine = StartCoroutine(AthenaTimer());
     }
 
@@ -148,17 +187,10 @@ public class PowerUp_Manager : MonoBehaviour
     {
         yield return new WaitForSeconds(athenaDuration);
         athenaShieldActive = false;
-        athenaTimerRoutine = null;
-    }
+        if (bubbleShieldOverlay != null)
+            bubbleShieldOverlay.SetActive(false);
 
-    public void ConsumeShield()
-    {
-        if (athenaTimerRoutine != null)
-        {
-            StopCoroutine(athenaTimerRoutine);
-            athenaTimerRoutine = null;
-        }
-        athenaShieldActive = false;
+        athenaTimerRoutine = null;
     }
 
     private void ActivateZeus()
@@ -179,8 +211,8 @@ public class PowerUp_Manager : MonoBehaviour
                 Destroy(obstacle);
                 destroyedCount++;
             }
+            playerController.PlaySound(StarEffect, 1f);
         }
-        
     }
 
     private void RefreshUI()
