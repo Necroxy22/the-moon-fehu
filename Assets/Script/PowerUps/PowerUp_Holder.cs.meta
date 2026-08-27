@@ -3,7 +3,12 @@ guid: 8d6c7112faf68e446a805b7fc8850c04
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - slot0Icon: {instanceID: 0}
+  - slot1Icon: {instanceID: 0}
+  - hermesSprite: {fileID: 21300000, guid: d798522f0e9fd674e998c161457d04bf, type: 3}
+  - athenaSprite: {fileID: 21300000, guid: 6eda9c9473c14ed4a844f58e2f0db1f7, type: 3}
+  - zeusSprite: {fileID: 21300000, guid: 274954f9fc1499f41af065c45f914e79, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

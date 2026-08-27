@@ -16,7 +16,24 @@ public class PowerUp_Manager : MonoBehaviour
 
     public PowerUp_Holder holderUI;
     public bool HasShield => athenaShieldActive;
+    public float useAnimationDuration = 0.5f;
+    private PowerUpType? currentlyUsing = null;
+    private Coroutine useAnimationRoutine;
 
+    public PowerUpType? CurrentlyUsing => currentlyUsing;
+    public bool HasZeusInInventory => slot0 == PowerUpType.Zeus || slot1 == PowerUpType.Zeus;
+    public bool HasAthenaInInventory => slot0 == PowerUpType.Athena || slot1 == PowerUpType.Athena || athenaShieldActive;
+    public bool HasHermesInInventory => slot0 == PowerUpType.Hermes || slot1 == PowerUpType.Hermes;
+    public PowerUpType? ActiveHeldPowerUp
+    {
+        get
+        {
+            if (slot0 != null) return slot0.Value;
+            if (slot1 != null) return slot1.Value;
+            if (athenaShieldActive) return PowerUpType.Athena;
+            return null;
+        }
+    }
     private PlayerController playerController;
 
     void Start()
@@ -66,14 +83,31 @@ public class PowerUp_Manager : MonoBehaviour
         if (type == null)
             return;
 
-        Activate(type.Value);
-
         if (slotIndex == 0)
             slot0 = null;
         else
             slot1 = null;
 
+        TriggerUseAnimation(type.Value);
+        Activate(type.Value);
+
         RefreshUI();
+    }
+
+    private void TriggerUseAnimation(PowerUpType type)
+    {
+        if (useAnimationRoutine != null)
+            StopCoroutine(useAnimationRoutine);
+
+        currentlyUsing = type;
+        useAnimationRoutine = StartCoroutine(UseAnimationTimer());
+    }
+
+    private IEnumerator UseAnimationTimer()
+    {
+        yield return new WaitForSeconds(useAnimationDuration);
+        currentlyUsing = null;
+        useAnimationRoutine = null;
     }
 
     private void Activate(PowerUpType type)
@@ -146,6 +180,7 @@ public class PowerUp_Manager : MonoBehaviour
                 destroyedCount++;
             }
         }
+        
     }
 
     private void RefreshUI()

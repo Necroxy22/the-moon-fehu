@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip crashSound;
     public AudioClip damageSound;
     public AudioClip itemSound;
+    
 
     void Start()
     {
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
+        Debug.Log("Jump() called at " + Time.time);
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
@@ -66,7 +68,7 @@ public class PlayerController : MonoBehaviour
         {
             if (isFalling)
             {
-                if (rb.velocity.y < 0)
+                if (rb != null && rb.velocity.y < 0)
                 {
                     rb.velocity += Vector2.up *
                         Physics2D.gravity.y *
@@ -74,20 +76,26 @@ public class PlayerController : MonoBehaviour
                         Time.deltaTime;
                 }
 
-                bool grounded = Physics2D.OverlapCircle(
+                bool grounded = groundCheck != null && Physics2D.OverlapCircle(
                     groundCheck.position,
                     groundCheckRadius,
                     groundLayer
                 );
 
-                if (grounded && rb.velocity.y <= 0.1f)
+                if (grounded && (rb == null || rb.velocity.y <= 0.1f))
                 {
                     isFalling = false;
 
-                    rb.velocity = Vector2.zero;
-                    rb.bodyType = RigidbodyType2D.Static;
+                    if (rb != null)
+                    {
+                        rb.velocity = Vector2.zero;
+                        rb.bodyType = RigidbodyType2D.Static;
+                    }
 
-                    animator.SetTrigger("Death");
+                    if (animator != null)
+                    {
+                        animator.SetTrigger("Death");
+                    }
                 }
             }
             return;
@@ -102,20 +110,18 @@ public class PlayerController : MonoBehaviour
             );
         }
 
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if(isGrounded)
             {
                 Jump();
-                if (animator != null) animator.SetTrigger("Jump");
                 extraJumpsUsed = 0;
                 PlaySound(jumpSound, 1f);
             }
             else if (extraJumpsUsed < extraJumpsAvailable)
             {
-                //tastistustajitaj
                 Jump();
-                if (animator != null) animator.SetTrigger("Jump");
                 extraJumpsUsed++;
                 extraJumpsAvailable = 0;
                 PlaySound(jumpSound, 1f);
@@ -138,6 +144,45 @@ public class PlayerController : MonoBehaviour
             );
         }
 
+        UpdateCharacterAnimation();
+    }
+
+    private void UpdateCharacterAnimation()
+    {
+        if (animator == null || isDead) return;
+
+        // Tentukan animasi yang seharusnya aktif berdasarkan item dan status grounded
+        string targetAnim = "Run";
+
+        if (powerUpManager != null && powerUpManager.ActiveHeldPowerUp != null)
+        {
+            PowerUpType held = powerUpManager.ActiveHeldPowerUp.Value;
+            switch (held)
+            {
+                case PowerUpType.Zeus:
+                    targetAnim = isGrounded ? "RunWithBintang" : "JumpWithBintang";
+                    break;
+                case PowerUpType.Athena:
+                    targetAnim = isGrounded ? "RunWithShield" : "JumpWithShield";
+                    break;
+                case PowerUpType.Hermes:
+                    targetAnim = isGrounded ? "RunWithSepatu" : "JumpWithSepatu";
+                    break;
+            }
+        }
+        else
+        {
+            // Tidak memegang power-up apa pun (Karakter Biasa)
+            targetAnim = isGrounded ? "Run" : "Jump";
+        }
+
+        // Putar animasi target hanya jika state animator sekarang berbeda (agar tidak reset frame tiap detik)
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName(targetAnim))
+        {
+            animator.Play(targetAnim);
+        }
+
+        // Sinkronkan parameter untuk kompatibilitas animator controller
         animator.SetBool("IsGrounded", isGrounded);
         animator.SetFloat("VerticalVelocity", rb.velocity.y);
     }
@@ -201,7 +246,13 @@ public class PlayerController : MonoBehaviour
 
         if (rb != null)
         {
-            rb.velocity = new Vector2(0f, rb.velocity.y);
+            // Pastikan Rigidbody Dynamic dan gravity aktif
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.gravityScale = 4f; // pakai default gravity, bisa disesuaikan
+
+            // Paksa velocity ke bawah supaya fall logic langsung aktif
+            // (mencegah freeze kalau player mati pas lagi di ground)
+            rb.velocity = new Vector2(0f, Mathf.Min(rb.velocity.y, -0.5f));
         }
 
         PlaySound(crashSound, 1f);
