@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu_Manager : MonoBehaviour
 {
-    public string gameSceneName = "SampleScene";
+    public string gameSceneName = "Komik Panel";
 
-    public void PlayGame()
+    public void AnimationGame()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(gameSceneName);
