@@ -5,6 +5,8 @@ using UnityEngine;
 public class Obstacle_Spawner : MonoBehaviour
 {
     public GameObject[] obstacles;
+    [Tooltip("Offset naik/turun obstacle (misal -0.5 untuk lebih ke bawah, 0.5 untuk lebih ke atas)")]
+    public float yOffset = 0f;
     public float spawnRate = 2.5f;
     private float timer;
 
@@ -53,13 +55,21 @@ public class Obstacle_Spawner : MonoBehaviour
         if (prefab == null)
             return;
 
-        float bottomOffset = GetBottomOffset(prefab);
-
         Vector3 spawnPos = new Vector3(
             transform.position.x,
-            transform.position.y + bottomOffset,
+            transform.position.y + yOffset,
             transform.position.z
         );
+
+        // Anti-overlap check: Pastikan tidak ada obstacle atau powerup lain dalam radius 3 unit
+        Collider2D[] nearby = Physics2D.OverlapCircleAll(spawnPos, 3f);
+        foreach (Collider2D col in nearby)
+        {
+            if (col.CompareTag("Obstacle") || col.GetComponent<PowerUpPickup>() != null)
+            {
+                return; // Batalkan spawn jika terlalu berdekatan
+            }
+        }
 
         Instantiate(prefab, spawnPos, Quaternion.identity);
     }

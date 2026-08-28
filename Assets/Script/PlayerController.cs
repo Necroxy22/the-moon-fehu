@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f; // reset guard
+
         rb = GetComponent<Rigidbody2D>();
         powerUpManager = GetComponent<PowerUp_Manager>();
         animator = GetComponent<Animator>();
@@ -61,11 +63,36 @@ public class PlayerController : MonoBehaviour
         extraJumpsAvailable = 1;
     }
 
+    public float fallDeadZoneY = -15f;
+    private bool diedFromAbyss = false;
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (PauseManager.Instance != null)
+            {
+                if (PauseManager.Instance.IsPaused)
+                    PauseManager.Instance.ResumeGame();
+                else
+                    PauseManager.Instance.PauseGame();
+            }
+        }
+
+        if (!isDead && transform.position.y < fallDeadZoneY)
+        {
+            diedFromAbyss = true;
+            currentHealth = 0;
+            if (spriteRenderer != null)
+                spriteRenderer.enabled = false;
+
+            Die();
+            return;
+        }
+
         if (isDead)
         {
-            if (isFalling)
+            if (isFalling && !diedFromAbyss)
             {
                 if (rb != null && rb.velocity.y < 0)
                 {
@@ -110,7 +137,9 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        bool canDoubleJump = (powerUpManager != null && powerUpManager.HasHermesEffect) || (extraJumpsAvailable > 0);
+        bool hasPegasus = powerUpManager != null && powerUpManager.HasPegasusEffect;
+        bool canDoubleJump = (powerUpManager != null && powerUpManager.HasHermesEffect) || (extraJumpsAvailable > 0) || hasPegasus;
+        int maxExtraJumps = hasPegasus ? 2 : 1;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -120,7 +149,7 @@ public class PlayerController : MonoBehaviour
                 extraJumpsUsed = 0;
                 PlaySound(jumpSound, 1f);
             }
-            else if (canDoubleJump && extraJumpsUsed < 1)
+            else if (canDoubleJump && extraJumpsUsed < maxExtraJumps)
             {
                 Jump();
                 extraJumpsUsed++;
@@ -167,6 +196,7 @@ public class PlayerController : MonoBehaviour
                     targetAnim = isJumpingUp ? "JumpWithShield" : "RunWithShield";
                     break;
                 case PowerUpType.Hermes:
+                case PowerUpType.Pegasus:
                     targetAnim = isJumpingUp ? "JumpWithSepatu" : "RunWithSepatu";
                     break;
             }
@@ -219,17 +249,21 @@ public class PlayerController : MonoBehaviour
         if (isInvulnerable || isDead)
             return;
 
-        // if (powerUpManager != null && powerUpManager.HasShield)
-        // {
-        //     powerUpManager.ConsumeShield();
-        //     return;
-        // }
+        if (powerUpManager != null && powerUpManager.HasShield)
+        {
+            powerUpManager.ConsumeShield();
+            return;
+        }
 
         currentHealth -= damage;
 
         if (currentHealth <= 0)
         {
             Die();
+        }
+        else if (currentHealth == 1)
+        {
+            NotificationManager.Notif("Hati hati cok! darah lu sekarat");
         }
         else
         {
@@ -258,13 +292,15 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DeathSequence()
     {
-        yield return new WaitUntil(() => !isFalling);
-
-        yield return null;
+        if (!diedFromAbyss)
+        {
+            yield return new WaitUntil(() => !isFalling);
+            yield return null;
+        }
 
         float clipLength = deathAnimationFallbackDuration;
 
-        if (animator != null)
+        if (animator != null && !diedFromAbyss)
         {
             animator.updateMode = AnimatorUpdateMode.UnscaledTime;
 
@@ -273,6 +309,10 @@ public class PlayerController : MonoBehaviour
             {
                 clipLength = clipInfo[0].clip.length;
             }
+        }
+        else
+        {
+            clipLength = 0.2f;
         }
 
         Time.timeScale = 0f;

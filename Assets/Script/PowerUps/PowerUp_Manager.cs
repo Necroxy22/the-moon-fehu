@@ -20,24 +20,34 @@ public class PowerUp_Manager : MonoBehaviour
     private bool hermesActive = false;
     private Coroutine hermesTimerRoutine;
 
+    public float pegasusDuration = 15f;
+    private bool pegasusActive = false;
+    private Coroutine pegasusTimerRoutine;
+
     public PowerUp_Holder holderUI;
     public bool HasShield => athenaShieldActive;
     public bool HasHermesEffect => hermesActive;
+    public bool HasPegasusEffect => pegasusActive;
     public float useAnimationDuration = 0.5f;
     private PowerUpType? currentlyUsing = null;
     private Coroutine useAnimationRoutine;
     public AudioClip BubbleEffect;
     public AudioClip StarEffect;
+    public AudioClip PegasusEffect;
     public PowerUpType? CurrentlyUsing => currentlyUsing;
     public bool HasZeusInInventory => slot0 == PowerUpType.Zeus || slot1 == PowerUpType.Zeus;
     public bool HasAthenaInInventory => slot0 == PowerUpType.Athena || slot1 == PowerUpType.Athena || athenaShieldActive;
     public bool HasHermesInInventory => slot0 == PowerUpType.Hermes || slot1 == PowerUpType.Hermes || hermesActive;
+    public bool HasPegasusInInventory => slot0 == PowerUpType.Pegasus || slot1 == PowerUpType.Pegasus || pegasusActive;
     public PowerUpType? ActiveHeldPowerUp
     {
         get
         {
             if (slot0 == PowerUpType.Zeus || slot1 == PowerUpType.Zeus) 
                 return PowerUpType.Zeus;
+
+            if (pegasusActive)
+                return PowerUpType.Pegasus;
 
             if (hermesActive) 
                 return PowerUpType.Hermes;
@@ -71,7 +81,7 @@ public class PowerUp_Manager : MonoBehaviour
         if (playerController != null && (playerController.IsInvulnerable || playerController.IsDead))
             return false;
 
-        if (athenaShieldActive || hermesActive)
+        if (athenaShieldActive || hermesActive || pegasusActive)
             return false;
 
         if (slot0 == type || slot1 == type)
@@ -99,7 +109,7 @@ public class PowerUp_Manager : MonoBehaviour
         if (playerController != null && (playerController.IsInvulnerable || playerController.IsDead))
             return;
 
-        if (athenaShieldActive || hermesActive)
+        if (athenaShieldActive || hermesActive || pegasusActive)
             return;
 
         PowerUpType? type = slotIndex == 0 ? slot0 : slot1;
@@ -149,7 +159,30 @@ public class PowerUp_Manager : MonoBehaviour
             case PowerUpType.Zeus:
                 ActivateZeus();
                 break;
+
+            case PowerUpType.Pegasus:
+                ActivatePegasus();
+                break;
         }
+    }
+
+    private void ActivatePegasus()
+    {
+        if (pegasusTimerRoutine != null)
+            StopCoroutine(pegasusTimerRoutine);
+
+        pegasusActive = true;
+        if (PegasusEffect != null && playerController != null)
+            playerController.PlaySound(PegasusEffect, 1f);
+
+        pegasusTimerRoutine = StartCoroutine(PegasusTimer());
+    }
+
+    private IEnumerator PegasusTimer()
+    {
+        yield return new WaitForSeconds(pegasusDuration);
+        pegasusActive = false;
+        pegasusTimerRoutine = null;
     }
 
     private void ActivateHermes()
@@ -214,7 +247,9 @@ public class PowerUp_Manager : MonoBehaviour
             playerController.PlaySound(StarEffect, 1f);
         }
     }
-
+    public void ConsumeShield()
+    {
+    }
     private void RefreshUI()
     {
         try

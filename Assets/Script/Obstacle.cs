@@ -11,7 +11,7 @@ public class Obstacle : MonoBehaviour
         float currentSpeed = DifficultyManager.Instance != null ? DifficultyManager.Instance.CurrentSpeed : speed;
         transform.Translate(Vector2.left * currentSpeed * Time.deltaTime);
 
-        if (transform.position.x < -15f)
+        if (transform.position.x < -35f)
         {
             Destroy(gameObject);
         }

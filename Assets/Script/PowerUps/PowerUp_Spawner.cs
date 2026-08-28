@@ -5,6 +5,13 @@ using UnityEngine;
 public class PowerUp_Spawner : MonoBehaviour
 {
     public GameObject[] powerUps;
+    [Header("Rare Power-Up Settings")]
+    [Tooltip("Prefab Item Langka (misal Pegasus Boots)")]
+    public GameObject rarePowerUpPrefab;
+    [Range(0f, 1f)]
+    [Tooltip("Peluang muncul item langka (misal 0.15 = 15%)")]
+    public float rareSpawnChance = 0.15f;
+
     public float spawnRate = 6f;
     private float timer;
 
@@ -33,18 +40,37 @@ public class PowerUp_Spawner : MonoBehaviour
 
     private void TrySpawnPowerUp()
     {
-        if (powerUps == null || powerUps.Length == 0)
+        GameObject prefabToSpawn = null;
+
+        // Cek peluang spawn item langka
+        if (rarePowerUpPrefab != null && Random.value <= rareSpawnChance)
+        {
+            prefabToSpawn = rarePowerUpPrefab;
+        }
+        else if (powerUps != null && powerUps.Length > 0)
+        {
+            int randomIndex = Random.Range(0, powerUps.Length);
+            prefabToSpawn = powerUps[randomIndex];
+        }
+
+        if (prefabToSpawn == null)
             return;
 
-        int randomIndex = Random.Range(0, powerUps.Length);
-
-        float baseHeight = groundY + tallestObstacleTop + clearance;
-        float extraHeight = Random.Range(0f, verticalRange);
-        float spawnY = baseHeight + extraHeight;
+        float spawnY = transform.position.y + Random.Range(-verticalRange * 0.5f, verticalRange * 0.5f);
 
         Vector3 spawnPos = new Vector3(transform.position.x, spawnY, transform.position.z);
 
-        Instantiate(powerUps[randomIndex], spawnPos, Quaternion.identity);
+        // Anti-overlap check: Pastikan tidak ada obstacle atau powerup lain dalam radius 3 unit
+        Collider2D[] nearby = Physics2D.OverlapCircleAll(spawnPos, 3f);
+        foreach (Collider2D col in nearby)
+        {
+            if (col.CompareTag("Obstacle") || col.GetComponent<PowerUpPickup>() != null)
+            {
+                return; // Batalkan spawn jika terlalu berdekatan
+            }
+        }
+
+        Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
     }
 
     private float CalculateTallestObstacleTop()

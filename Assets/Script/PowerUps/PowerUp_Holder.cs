@@ -11,6 +11,7 @@ public class PowerUp_Holder : MonoBehaviour
     public Sprite hermesSprite;
     public Sprite athenaSprite;
     public Sprite zeusSprite;
+    public Sprite pegasusSprite;
 
     public Color emptyColor = new Color(1f, 1f, 1f, 0.15f);
     public Color filledColor = Color.white;
@@ -54,6 +55,7 @@ public class PowerUp_Holder : MonoBehaviour
             case PowerUpType.Hermes: return hermesSprite;
             case PowerUpType.Athena: return athenaSprite;
             case PowerUpType.Zeus: return zeusSprite;
+            case PowerUpType.Pegasus: return pegasusSprite != null ? pegasusSprite : hermesSprite;
             default: return null;
         }
     }

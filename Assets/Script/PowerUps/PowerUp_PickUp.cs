@@ -4,7 +4,8 @@ public enum PowerUpType
 {
     Hermes,
     Athena,
-    Zeus
+    Zeus,
+    Pegasus
 }
 public class PowerUpPickup : MonoBehaviour
 {

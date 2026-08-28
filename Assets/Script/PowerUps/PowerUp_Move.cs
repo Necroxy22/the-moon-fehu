@@ -29,7 +29,7 @@ public class PowerUp_Move : MonoBehaviour
 
         transform.position = new Vector3(newX, newY, transform.position.z);
 
-        if (transform.position.x < -15f)
+        if (transform.position.x < -35f)
         {
             Destroy(gameObject);
         }
