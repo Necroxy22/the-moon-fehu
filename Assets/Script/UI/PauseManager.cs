@@ -16,36 +16,34 @@ public class PauseManager : MonoBehaviour
     private bool isPaused = false;
     public bool IsPaused => isPaused;
 
+    private CanvasGroup panelCanvasGroup;
+
     void Awake()
     {
         Instance = this;
-        
+
         if (pausePanel == null)
         {
             pausePanel = this.gameObject;
         }
 
-        // Pastikan saat mulai game, panel langsung tertutup
-        if (pausePanel != null)
+        panelCanvasGroup = pausePanel.GetComponent<CanvasGroup>();
+        if (panelCanvasGroup == null)
         {
-            pausePanel.SetActive(false);
+            panelCanvasGroup = pausePanel.AddComponent<CanvasGroup>();
         }
+
+        HideUI();
     }
 
     void Update()
     {
-        // Dengarkan input P atau Escape
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
         {
-            // Jangan bisa pause kalau di layar Game Over
-            if (GameOver_Manager.Instance != null && GameOver_Manager.Instance.gameObject.activeInHierarchy)
+            if (GameOver_Manager.Instance != null && GameOver_Manager.Instance.IsGameOver)
                 return;
-
-            if (isPaused)
-            {
-                ResumeGame();
-            }
-            else
+            
+            if (!isPaused)
             {
                 PauseGame();
             }
@@ -56,29 +54,41 @@ public class PauseManager : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0f;
-
-        if (pausePanel != null)
-        {
-            pausePanel.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(true);
-        }
+        ShowUI();
     }
 
     public void ResumeGame()
     {
         isPaused = false;
         Time.timeScale = 1f;
+        HideUI();
+    }
 
-        if (pausePanel != null)
+    private void ShowUI()
+    {
+        if (panelCanvasGroup != null)
+        {
+            panelCanvasGroup.alpha = 1f;
+            panelCanvasGroup.interactable = true;
+            panelCanvasGroup.blocksRaycasts = true;
+        }
+        else if (pausePanel != null)
+        {
+            pausePanel.SetActive(true);
+        }
+    }
+
+    private void HideUI()
+    {
+        if (panelCanvasGroup != null)
+        {
+            panelCanvasGroup.alpha = 0f;
+            panelCanvasGroup.interactable = false;
+            panelCanvasGroup.blocksRaycasts = false;
+        }
+        else if (pausePanel != null)
         {
             pausePanel.SetActive(false);
-        }
-        else
-        {
-            gameObject.SetActive(false);
         }
     }
 

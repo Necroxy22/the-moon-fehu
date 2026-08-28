@@ -68,17 +68,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (PauseManager.Instance != null)
-            {
-                if (PauseManager.Instance.IsPaused)
-                    PauseManager.Instance.ResumeGame();
-                else
-                    PauseManager.Instance.PauseGame();
-            }
-        }
-
         if (!isDead && transform.position.y < fallDeadZoneY)
         {
             diedFromAbyss = true;
@@ -154,7 +143,7 @@ public class PlayerController : MonoBehaviour
                 Jump();
                 extraJumpsUsed++;
                 PlaySound(jumpSound, 1f);
-            }
+            }//koyoasu
         }
 
         if (rb.velocity.y < 0)

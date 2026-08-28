@@ -7,6 +7,7 @@ using TMPro;
 public class GameOver_Manager : MonoBehaviour
 {
     public static GameOver_Manager Instance;
+    public bool IsGameOver { get; private set; }
 
     public TextMeshProUGUI finalTimeText;
     public TextMeshProUGUI highscoreText;
@@ -15,17 +16,19 @@ public class GameOver_Manager : MonoBehaviour
     public string menuSceneName = "Title_Screen";
 
     private const string HighscoreKey = "Highscore";
+    
 
     void Awake()
     {
         Instance = this;
+        IsGameOver = false;
         gameObject.SetActive(false);
     }
 
     public void ShowGameOver()
     {
         gameObject.SetActive(true);
-        
+        IsGameOver = true;
         Time.timeScale = 0f;
 
         float finalTime = 0f;
@@ -47,10 +50,10 @@ public class GameOver_Manager : MonoBehaviour
         }
 
         if (finalTimeText != null)
-            finalTimeText.text = "Time: " + FormatTime(finalTime);
+            finalTimeText.text = "TIME: " + FormatTime(finalTime);
 
         if (highscoreText != null)
-            highscoreText.text = "Best: " + FormatTime(savedHighscore);
+            highscoreText.text = "BEST: " + FormatTime(savedHighscore);
     }
 
     private string FormatTime(float t)
@@ -62,12 +65,14 @@ public class GameOver_Manager : MonoBehaviour
 
     public void RestartGame()
     {
+        IsGameOver = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(gameSceneName);
     }
 
     public void ReturnToMenu()
     {
+        IsGameOver = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene(menuSceneName);
     }

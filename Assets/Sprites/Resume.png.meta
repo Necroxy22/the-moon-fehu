@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: aa06b26752a39ac439f0439b5e85d703
+guid: 7dff7cb8a5c3c4c46a665709d6c7653e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -98,7 +98,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Button Return_0
+      name: Resume_0
       rect:
         serializedVersion: 2
-        x: 219
-        y: 186
-        width: 1170
-        height: 343
+        x: 218
+        y: 185
+        width: 1172
+        height: 345
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5a324a571f71f7d4b8338d3955cc65e9
-      internalID: -899442870
+      spriteID: 72ead5e202629c64aae82debd196a582
+      internalID: -408935764
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Button Return_1
+      name: Resume_1
       rect:
         serializedVersion: 2
-        x: 1719
-        y: 186
-        width: 1161
-        height: 328
+        x: 1718
+        y: 185
+        width: 1163
+        height: 330
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,8 +145,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b9d5a58b48291d249ab134ca6cb5371e
-      internalID: -390802568
+      spriteID: c7685ad8dda3cd846814b4362802842a
+      internalID: -1434079587
       vertices: []
       indices: 
       edges: []
@@ -162,8 +162,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Button Return_0: -899442870
-      Button Return_1: -390802568
+      Resume_0: -408935764
+      Resume_1: -1434079587
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

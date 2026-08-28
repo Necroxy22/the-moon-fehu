@@ -5,7 +5,7 @@ public class GroundLooper : MonoBehaviour
     public Transform[] segments;
     public float defaultSpeed = 6f;
     [Tooltip("Overlap sedikit (misal 0.1 sampai 0.3) agar tidak ada celah garis putih")]
-    public float overlapOffset = 0.15f;
+    public float overlapOffset = 0.3f;
     public float despawnBuffer = 10f;
 
     [Header("Seam Obstacle Cover")]
@@ -18,6 +18,30 @@ public class GroundLooper : MonoBehaviour
 
     private float autoSegmentWidth;
     private float despawnThresholdX;
+
+    void Awake()
+    {
+        // Auto-find Ground_A dan Ground_B jika array Segments kosong di Inspector
+        if (segments == null || segments.Length == 0)
+        {
+            GameObject gA = GameObject.Find("Ground_A");
+            GameObject gB = GameObject.Find("Ground_B");
+            if (gA != null && gB != null)
+            {
+                segments = new Transform[] { gA.transform, gB.transform };
+            }
+        }
+
+        // Auto-find Obstacle Prefabs jika kosong
+        if (seamObstaclePrefabs == null || seamObstaclePrefabs.Length == 0)
+        {
+            Obstacle_Spawner spawner = FindObjectOfType<Obstacle_Spawner>();
+            if (spawner != null && spawner.obstacles != null && spawner.obstacles.Length > 0)
+            {
+                seamObstaclePrefabs = spawner.obstacles;
+            }
+        }
+    }
 
     void Start()
     {
@@ -77,7 +101,6 @@ public class GroundLooper : MonoBehaviour
 
             if (seg.position.x + (autoSegmentWidth * 0.5f) < despawnThresholdX)
             {
-                // Titik sambungan tepat berada di ujung kanan sebelum segmen baru dipasang
                 float seamX = rightmost.position.x + (autoSegmentWidth * 0.5f);
 
                 float newX = rightmost.position.x + effectiveWidth;
@@ -102,13 +125,13 @@ public class GroundLooper : MonoBehaviour
         if (seamObstaclePrefabs == null || seamObstaclePrefabs.Length == 0)
             return;
 
-        // Anti-Double Check: Cek apakah di sekitar posisi X tersebut sudah ada obstacle/item terdekat (radius 3.5 unit)
+        // Anti-Double Check: radius 3.5 unit
         Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(spawnX, seamObstacleY), 3.5f);
         foreach (Collider2D col in colliders)
         {
             if (col.CompareTag("Obstacle") || col.GetComponent<PowerUpPickup>() != null)
             {
-                return; // Jangan spawn jika sudah ada obstacle/item lain di dekat situ!
+                return;
             }
         }
 
