@@ -32,13 +32,21 @@ public class GroundLooper : MonoBehaviour
             }
         }
 
-        // Auto-find Obstacle Prefabs jika kosong
+        // Auto-find Obstacle Prefabs jika kosong (hanya ambil obstacle darat/tanah, bukan FlyingObstacle)
         if (seamObstaclePrefabs == null || seamObstaclePrefabs.Length == 0)
         {
             Obstacle_Spawner spawner = FindObjectOfType<Obstacle_Spawner>();
             if (spawner != null && spawner.obstacles != null && spawner.obstacles.Length > 0)
             {
-                seamObstaclePrefabs = spawner.obstacles;
+                var groundList = new System.Collections.Generic.List<GameObject>();
+                foreach (var obs in spawner.obstacles)
+                {
+                    if (obs != null && !obs.CompareTag("FlyingObstacle"))
+                    {
+                        groundList.Add(obs);
+                    }
+                }
+                seamObstaclePrefabs = groundList.ToArray();
             }
         }
     }
@@ -129,7 +137,7 @@ public class GroundLooper : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(spawnX, seamObstacleY), 3.5f);
         foreach (Collider2D col in colliders)
         {
-            if (col.CompareTag("Obstacle") || col.GetComponent<PowerUpPickup>() != null)
+            if (col.CompareTag("Obstacle") || col.CompareTag("FlyingObstacle") || col.GetComponent<PowerUpPickup>() != null)
             {
                 return;
             }
@@ -137,7 +145,7 @@ public class GroundLooper : MonoBehaviour
 
         int rand = Random.Range(0, seamObstaclePrefabs.Length);
         GameObject prefab = seamObstaclePrefabs[rand];
-        if (prefab == null) return;
+        if (prefab == null || prefab.CompareTag("FlyingObstacle")) return;
 
         Vector3 pos = new Vector3(spawnX, seamObstacleY, 0f);
         Instantiate(prefab, pos, Quaternion.identity);

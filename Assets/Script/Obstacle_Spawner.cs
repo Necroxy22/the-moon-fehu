@@ -5,8 +5,14 @@ using UnityEngine;
 public class Obstacle_Spawner : MonoBehaviour
 {
     public GameObject[] obstacles;
-    [Tooltip("Offset naik/turun obstacle (misal -0.5 untuk lebih ke bawah, 0.5 untuk lebih ke atas)")]
+    
+    [Header("Spawn Settings")]
+    [Tooltip("Offset untuk obstacle darat/tanah")]
     public float yOffset = 0f;
+    
+    [Tooltip("Offset tambahan khusus untuk obstacle melayang (misal: 3.5 atau 4.0)")]
+    public float flyingYOffset = 3.5f;
+
     public float spawnRate = 2.5f;
     private float timer;
 
@@ -55,9 +61,22 @@ public class Obstacle_Spawner : MonoBehaviour
         if (prefab == null)
             return;
 
+        // Cek ketinggian spawn (mendukung customYOffset dari script Obstacle atau tag FlyingObstacle)
+        float currentY = transform.position.y + yOffset;
+
+        Obstacle obsScript = prefab.GetComponent<Obstacle>();
+        if (obsScript != null && obsScript.customYOffset != 0f)
+        {
+            currentY += obsScript.customYOffset;
+        }
+        else if (prefab.CompareTag("FlyingObstacle"))
+        {
+            currentY += flyingYOffset; // Tambahkan ketinggian melayang
+        }
+
         Vector3 spawnPos = new Vector3(
             transform.position.x,
-            transform.position.y + yOffset,
+            currentY,
             transform.position.z
         );
 
@@ -65,21 +84,12 @@ public class Obstacle_Spawner : MonoBehaviour
         Collider2D[] nearby = Physics2D.OverlapCircleAll(spawnPos, 3f);
         foreach (Collider2D col in nearby)
         {
-            if (col.CompareTag("Obstacle") || col.GetComponent<PowerUpPickup>() != null)
+            if (col.CompareTag("Obstacle") || col.CompareTag("FlyingObstacle") || col.GetComponent<PowerUpPickup>() != null)
             {
                 return; // Batalkan spawn jika terlalu berdekatan
             }
         }
 
         Instantiate(prefab, spawnPos, Quaternion.identity);
-    }
-
-    private float GetBottomOffset(GameObject prefab)
-    {
-        SpriteRenderer sr = prefab.GetComponentInChildren<SpriteRenderer>();
-        if (sr == null)
-            return 0f;
-
-        return -sr.bounds.min.y;
     }
 }
