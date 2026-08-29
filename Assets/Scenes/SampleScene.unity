@@ -1867,7 +1867,6 @@ GameObject:
   - component: {fileID: 589401173}
   - component: {fileID: 589401172}
   - component: {fileID: 589401171}
-  - component: {fileID: 589401174}
   m_Layer: 0
   m_Name: BackgroundDecorSpawner
   m_TagString: Untagged
@@ -1888,13 +1887,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   decorPrefabs:
-  - {fileID: 6158827599619796648, guid: c6d8f9cf35617b340bd1c49aa83b2930, type: 3}
+  - {fileID: 5159848747418173009, guid: c6d8f9cf35617b340bd1c49aa83b2930, type: 3}
   - {fileID: 1886197368064899721, guid: 9ee12d531a0af584abfca06010a67696, type: 3}
   - {fileID: 6954678471275195879, guid: c093439e0c8b87d449cef8e52802a47d, type: 3}
-  intervalSeconds: 30
-  spawnX: 16
+  intervalSeconds: 15
+  spawnX: 1
   minY: 2
-  maxY: 5
+  maxY: 1
   spawnZ: 1
   scrollSpeed: 1.2
   despawnX: -18
@@ -1965,21 +1964,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &589401174
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 589401170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb8be15c164c3dd46abd9cf94be8c583, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1.5
-  despawnX: -15
-  scaleWithGameSpeed: 0
 --- !u!1001 &603237934
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3530,8 +3514,8 @@ MonoBehaviour:
   - {fileID: 6985933153301421208, guid: fadf939716442bd44aad3561ffca3554, type: 3}
   - {fileID: 8192710167059835339, guid: b480f3c94a4678c4eab72a21a87e7d3f, type: 3}
   rarePowerUpPrefab: {fileID: 2525977326282237827, guid: 8a7b6c5d4e3f2a1b9c8d7e6f5a4b3c2d, type: 3}
-  rareSpawnChance: 0.2
-  spawnRate: 6
+  rareSpawnChance: 0.11
+  spawnRate: 1
   obstacleReference: []
   groundY: 1
   clearance: 1
