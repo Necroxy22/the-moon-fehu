@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Prefabs/Scenes/Title_Screen.unity
+    path: Assets/Scenes/Title_Screen 1.unity
     guid: bbdf7e53fc36c134093151063873422d
   - enabled: 1
-    path: Assets/Prefabs/Scenes/Komik Panel.unity
+    path: Assets/Scenes/Komik Panel.unity
     guid: 05c29af1154aab04c843b127937e9f63
   - enabled: 1
-    path: Assets/Prefabs/Scenes/SampleScene.unity
+    path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}

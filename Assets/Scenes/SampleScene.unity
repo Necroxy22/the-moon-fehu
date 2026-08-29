@@ -3530,10 +3530,10 @@ MonoBehaviour:
   - {fileID: 6985933153301421208, guid: fadf939716442bd44aad3561ffca3554, type: 3}
   - {fileID: 8192710167059835339, guid: b480f3c94a4678c4eab72a21a87e7d3f, type: 3}
   rarePowerUpPrefab: {fileID: 2525977326282237827, guid: 8a7b6c5d4e3f2a1b9c8d7e6f5a4b3c2d, type: 3}
-  rareSpawnChance: 1
+  rareSpawnChance: 0.2
   spawnRate: 6
   obstacleReference: []
-  groundY: 0
+  groundY: 1
   clearance: 1
   verticalRange: 1
 --- !u!4 &1454474112

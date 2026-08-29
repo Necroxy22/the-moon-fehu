@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6158827599619796648
+--- !u!1 &5159848747418173009
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7770219657938104527}
-  - component: {fileID: 6604938444611830198}
-  - component: {fileID: -8293205373316799142}
+  - component: {fileID: 4838615937709249672}
+  - component: {fileID: 4002448106807547342}
   m_Layer: 0
   m_Name: Jupiter
   m_TagString: Untagged
@@ -18,28 +17,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7770219657938104527
+--- !u!4 &4838615937709249672
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6158827599619796648}
+  m_GameObject: {fileID: 5159848747418173009}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.72, y: 1.72, z: 1.72}
+  m_LocalScale: {x: 1.29, y: 1.29, z: 1.29}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &6604938444611830198
+--- !u!212 &4002448106807547342
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6158827599619796648}
+  m_GameObject: {fileID: 5159848747418173009}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -79,30 +78,9 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 25.6, y: 16}
+  m_Size: {x: 10, y: 6.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-8293205373316799142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6158827599619796648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19bfd4191e5d658499142f513e192bc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  decorPrefabs:
-  - {fileID: 0}
-  intervalSeconds: 30
-  spawnX: 16
-  minY: 2
-  maxY: 5
-  spawnZ: 1
-  scrollSpeed: 1.2
-  despawnX: -18
