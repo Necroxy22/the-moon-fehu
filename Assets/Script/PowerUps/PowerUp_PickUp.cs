@@ -7,6 +7,7 @@ public enum PowerUpType
     Zeus,
     Pegasus
 }
+
 public class PowerUpPickup : MonoBehaviour
 {
     public PowerUpType type;
@@ -17,19 +18,18 @@ public class PowerUpPickup : MonoBehaviour
             return;
 
         PowerUp_Manager manager = other.GetComponent<PowerUp_Manager>();
-        if (manager != null)
-        {
-            bool stored = manager.TryStore(type);
-            if (!stored)
-            {
-                return;
-            }
-        }
+        if (manager == null) return;
 
-        PlayerController player = other.GetComponent<PlayerController>();
-        if (player != null)
+        if (type == PowerUpType.Athena)
         {
-            player.PlaySound(player.itemSound, 1f);
+            // Bubble Shield langsung pasang di badan player (world buff)
+            manager.ActivateBubbleShield();
+        }
+        else
+        {
+            // Item manual: coba simpan ke inventory slot (J / K)
+            bool stored = manager.TryStore(type);
+            if (!stored) return; // Slot penuh, abaikan item
         }
 
         Destroy(gameObject);

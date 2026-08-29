@@ -50,10 +50,10 @@ public class GameOver_Manager : MonoBehaviour
         }
 
         if (finalTimeText != null)
-            finalTimeText.text = "TIME: " + FormatTime(finalTime);
+            finalTimeText.text = "Time: " + FormatTime(finalTime);
 
         if (highscoreText != null)
-            highscoreText.text = "BEST: " + FormatTime(savedHighscore);
+            highscoreText.text = "Best: " + FormatTime(savedHighscore);
     }
 
     private string FormatTime(float t)

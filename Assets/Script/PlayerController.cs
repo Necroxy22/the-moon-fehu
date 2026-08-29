@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
     public AudioClip jumpSound;
     public AudioClip crashSound;
     public AudioClip damageSound;
-    public AudioClip itemSound;
 
     void Start()
     {
@@ -181,9 +180,6 @@ public class PlayerController : MonoBehaviour
                 case PowerUpType.Zeus:
                     targetAnim = isJumpingUp ? "JumpWithBintang" : "RunWithBintang";
                     break;
-                case PowerUpType.Athena:
-                    targetAnim = isJumpingUp ? "JumpWithShield" : "RunWithShield";
-                    break;
                 case PowerUpType.Hermes:
                 case PowerUpType.Pegasus:
                     targetAnim = isJumpingUp ? "JumpWithSepatu" : "RunWithSepatu";
@@ -250,13 +246,15 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
-        else if (currentHealth == 1)
+        else if (currentHealth == 1 && PauseManager.Instance.IsPaused == false)
         {
             NotificationManager.Notif("Hati hati cok! darah lu sekarat");
+            playerAudio.PlayOneShot(damageSound);
+            StartCoroutine(InvulnerabilityCoroutine());
         }
         else
         {
-            PlaySound(damageSound, 1f);
+            playerAudio.PlayOneShot(damageSound);
             StartCoroutine(InvulnerabilityCoroutine());
         }
     }
@@ -318,7 +316,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead)
         {
-            if (collision.gameObject.CompareTag("Obstacle"))
+            if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("FlyingObstacle"))
             {
                 Collider2D myCollider = GetComponent<Collider2D>();
                 if (myCollider != null && collision.collider != null)
@@ -329,8 +327,19 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (collision.gameObject.CompareTag("Obstacle"))
+        if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("FlyingObstacle"))
         {
+            // Jika punya shield (Athena), jangan biarkan obstacle mendorong player masuk jurang!
+            if (powerUpManager != null && powerUpManager.HasShield)
+            {
+                Collider2D myCol = GetComponent<Collider2D>();
+                if (myCol != null && collision.collider != null)
+                {
+                    Physics2D.IgnoreCollision(myCol, collision.collider, true);
+                }
+                return;
+            }
+
             bool landedOnTop = false;
 
             foreach (ContactPoint2D contact in collision.contacts)
