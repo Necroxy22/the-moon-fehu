@@ -8,6 +8,7 @@ public class Tutorial : MonoBehaviour
     public GameObject tutorial1;
     public GameObject tutorial2;
     public GameObject tutorial3;
+    public GameObject tutorial4;
 
     private int tutorialPage = 0;
 
@@ -59,6 +60,24 @@ public class Tutorial : MonoBehaviour
             {
                 PreviousTutorial();
             }
+
+            // → Tutorial 3 → Tutorial 4
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                NextTutorial();
+            }
+        }
+
+        // =========================
+        // TUTORIAL 4
+        // =========================
+        else if (tutorialPage == 4)
+        {
+            // ← Tutorial 4 → Tutorial 3
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                PreviousTutorial();
+            }
         }
     }
 
@@ -73,13 +92,14 @@ public class Tutorial : MonoBehaviour
         tutorial1.SetActive(true);
         tutorial2.SetActive(false);
         tutorial3.SetActive(false);
+        tutorial4.SetActive(false);
 
         tutorialPage = 1;
     }
 
 
     // ========================================
-    // TUTORIAL 1/2 → NEXT
+    // NEXT TUTORIAL
     // ========================================
     public void NextTutorial()
     {
@@ -97,15 +117,29 @@ public class Tutorial : MonoBehaviour
 
             tutorialPage = 3;
         }
+        else if (tutorialPage == 3)
+        {
+            tutorial3.SetActive(false);
+            tutorial4.SetActive(true);
+
+            tutorialPage = 4;
+        }
     }
 
 
     // ========================================
-    // TUTORIAL 3/2 → PREVIOUS
+    // PREVIOUS TUTORIAL
     // ========================================
     public void PreviousTutorial()
     {
-        if (tutorialPage == 3)
+        if (tutorialPage == 4)
+        {
+            tutorial4.SetActive(false);
+            tutorial3.SetActive(true);
+
+            tutorialPage = 3;
+        }
+        else if (tutorialPage == 3)
         {
             tutorial3.SetActive(false);
             tutorial2.SetActive(true);
@@ -130,6 +164,7 @@ public class Tutorial : MonoBehaviour
         tutorial1.SetActive(false);
         tutorial2.SetActive(false);
         tutorial3.SetActive(false);
+        tutorial4.SetActive(false);
 
         menuPanel.SetActive(true);
 
