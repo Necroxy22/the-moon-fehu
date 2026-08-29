@@ -248,7 +248,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (currentHealth == 1 && PauseManager.Instance.IsPaused == false)
         {
-            NotificationManager.Notif("Hati hati cok! darah lu sekarat");
             playerAudio.PlayOneShot(damageSound);
             StartCoroutine(InvulnerabilityCoroutine());
         }

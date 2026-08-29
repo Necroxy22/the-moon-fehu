@@ -19,19 +19,22 @@ public class PowerUp_Manager : MonoBehaviour
     private float slot1MaxDuration = 1f;
 
     [Header("Bubble Shield (Instant World Passive)")]
-    public float athenaDuration = 20f;
+    public float athenaDuration = 10f;
+    public float athenaBlinkThreshold = 5f;
+    public float athenaBlinkInterval = 0.15f;
     private bool athenaShieldActive = false;
     private Coroutine athenaTimerRoutine;
     public GameObject bubbleShieldOverlay;
     public AudioClip BubbleEffect;
 
     [Header("Buff Durations Once Used")]
-    public float hermesBuffDuration = 10f;
+    public float hermesBuffDuration = 5f;
     private bool hermesActive = false;
     private Coroutine hermesTimerRoutine;
 
-    public float pegasusBuffDuration = 15f;
+    public float pegasusBuffDuration = 10f;
     private bool pegasusActive = false;
+    public GameObject pegasusShieldOverlay;
     private Coroutine pegasusTimerRoutine;
 
     [Header("Zeus / Bintang Settings")]
@@ -76,6 +79,9 @@ public class PowerUp_Manager : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         if (bubbleShieldOverlay != null)
             bubbleShieldOverlay.SetActive(false);
+
+        if (pegasusShieldOverlay != null)
+            pegasusShieldOverlay.SetActive(false);
 
         RefreshUI();
     }
@@ -160,7 +166,6 @@ public class PowerUp_Manager : MonoBehaviour
         return false; // Kedua slot penuh
     }
 
-    // Dipanggil LANGSUNG saat player menyentuh Bubble di dunia
     public void ActivateBubbleShield()
     {
         if (athenaTimerRoutine != null)
@@ -176,10 +181,26 @@ public class PowerUp_Manager : MonoBehaviour
 
         athenaTimerRoutine = StartCoroutine(BubbleShieldTimer());
     }
-
     private IEnumerator BubbleShieldTimer()
     {
-        yield return new WaitForSeconds(athenaDuration);
+        float elapsed = 0f;
+
+        float normalPhase = athenaDuration - athenaBlinkThreshold;
+        if (normalPhase > 0f)
+            yield return new WaitForSeconds(normalPhase);
+
+        float blinkElapsed = 0f;
+        bool visible = true;
+        while (blinkElapsed < athenaBlinkThreshold)
+        {
+            visible = !visible;
+            if (bubbleShieldOverlay != null)
+                bubbleShieldOverlay.SetActive(visible);
+
+            yield return new WaitForSeconds(athenaBlinkInterval);
+            blinkElapsed += athenaBlinkInterval;
+        }
+
         athenaShieldActive = false;
 
         if (bubbleShieldOverlay != null)
@@ -188,7 +209,6 @@ public class PowerUp_Manager : MonoBehaviour
         athenaTimerRoutine = null;
     }
 
-    // Menggunakan item di slot (Item langsung dikonsumsi)
     private void UseSlot(int slotIndex)
     {
         PowerUpType? type = slotIndex == 0 ? slot0 : slot1;
@@ -241,6 +261,10 @@ public class PowerUp_Manager : MonoBehaviour
         pegasusActive = true;
         if (PegasusEffect != null && playerController != null)
             playerController.PlaySound(PegasusEffect, 1f);
+        
+        
+        if (pegasusShieldOverlay != null)
+            pegasusShieldOverlay.SetActive(true);
 
         pegasusTimerRoutine = StartCoroutine(PegasusTimer());
     }
@@ -249,9 +273,13 @@ public class PowerUp_Manager : MonoBehaviour
     {
         yield return new WaitForSeconds(pegasusBuffDuration);
         pegasusActive = false;
+        
+        if (pegasusShieldOverlay != null)
+            pegasusShieldOverlay.SetActive(false);
         pegasusTimerRoutine = null;
-    }
 
+    }
+ 
     private void ActivateZeus()
     {
         GameObject[] obstacles = GameObject.FindGameObjectsWithTag(obstacleTag);

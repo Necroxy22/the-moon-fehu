@@ -45,7 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacles:
-  - {fileID: 2887192396035740403, guid: 37f6f51bf5edb8a4d9f55c5cb4ef52c6, type: 3}
-  - {fileID: 6330113513487180668, guid: 21f76aafa28ff1f45b33f38e4ccc425b, type: 3}
-  - {fileID: 4687990805055792558, guid: 4eda1a52119f2e44abaafee06d50dce2, type: 3}
-  spawnRate: 2
+  - {fileID: 9211724359119086507, guid: 86c8a0f9273f722439e8766acd0d38a8, type: 3}
+  - {fileID: 3073021822491871821, guid: 581c659a983a1e849afd333cdc690770, type: 3}
+  - {fileID: 6209943183442715226, guid: e0fbff780b179304796e915b0848cfc4, type: 3}
+  - {fileID: 8891158231686012644, guid: 529e63a5abf531e4fbca342869b95ef9, type: 3}
+  - {fileID: 3491221397598287224, guid: e4e911170c9f84744b126cae52d0afe8, type: 3}
+  - {fileID: 6254133561891604687, guid: a6979f0c08d454346a2d6e7842150c85, type: 3}
+  - {fileID: 7852292899110646760, guid: dfc2af9ac828f724684ee6b21eed3c0d, type: 3}
+  yOffset: -1
+  flyingYOffset: 5
+  spawnRate: 1
