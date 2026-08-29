@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 66d15fae383d9ce4092ec7dd0ff63d57
+guid: ad65359383fbbea48bf535e4c812c8c2
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 256
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -108,7 +108,112 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: PetirAnim_0
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 119
+        width: 449
+        height: 436
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15e20d176943ae64d9df4d0cee8eb2c0
+      internalID: 2078914436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PetirAnim_1
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 158
+        width: 476
+        height: 361
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d98ec1cbf1edaa439631ed993772073
+      internalID: -190740875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PetirAnim_2
+      rect:
+        serializedVersion: 2
+        x: 1286
+        y: 142
+        width: 443
+        height: 409
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36d895514706f2a41bef6d0d8b6094d9
+      internalID: -1265173354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PetirAnim_3
+      rect:
+        serializedVersion: 2
+        x: 1912
+        y: 112
+        width: 408
+        height: 465
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95a0d3dff08b23e40a06501e5fd622c4
+      internalID: -235567537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PetirAnim_4
+      rect:
+        serializedVersion: 2
+        x: 2446
+        y: 126
+        width: 476
+        height: 439
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ede3977d589fe1d448cd7f9af381447d
+      internalID: 1654270264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +224,12 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      PetirAnim_0: 2078914436
+      PetirAnim_1: -190740875
+      PetirAnim_2: -1265173354
+      PetirAnim_3: -235567537
+      PetirAnim_4: 1654270264
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

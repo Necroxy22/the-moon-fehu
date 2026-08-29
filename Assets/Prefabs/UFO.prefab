@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 8126366581374009321}
   - component: {fileID: 1647904684030306597}
   - component: {fileID: 7522474574610388873}
+  - component: {fileID: -2799055369827315129}
   m_Layer: 6
   m_Name: UFO
   m_TagString: FlyingObstacle
@@ -229,3 +230,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
+  customYOffset: 0
+--- !u!114 &-2799055369827315129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6209943183442715226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fc0dcd98abcb9d47a6b4a90b938a4c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAmplitude: 1.5
+  hoverSpeed: 2
