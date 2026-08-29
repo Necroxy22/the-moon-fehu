@@ -41,6 +41,7 @@ public class PowerUp_Manager : MonoBehaviour
     public float zeusDestroyDistance = 10f;
     public float zeusDestroyWidth = 2.5f;
     public string obstacleTag = "Obstacle";
+    public string fobstacleTag = "FlyingObstacle";
 
     [Header("Audio & References")]
     public PowerUp_Holder holderUI;
@@ -293,6 +294,19 @@ public class PowerUp_Manager : MonoBehaviour
             if (isAhead && isWithinDistance && isWithinWidth)
             {
                 Destroy(obstacle);
+            }
+        }
+        GameObject[] flyingobstacles = GameObject.FindGameObjectsWithTag(fobstacleTag);
+        foreach (GameObject flyingobstacle in flyingobstacles)
+        {
+            Vector2 toFlyingObstacle = flyingobstacle.transform.position - transform.position;
+            bool isAhead = toFlyingObstacle.x > 0f;
+            bool isWithinDistance = toFlyingObstacle.x <= zeusDestroyDistance;
+            bool isWithinWidth = Mathf.Abs(toFlyingObstacle.y) <= zeusDestroyWidth;
+
+            if (isAhead && isWithinDistance && isWithinWidth)
+            {
+                Destroy(flyingobstacle);
             }
         }
 
