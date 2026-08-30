@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Title_Screen 1.unity
-    guid: bbdf7e53fc36c134093151063873422d
+    path: Assets/Scenes/Title_Screen.unity
+    guid: 0fa5f2ebcbe4dd7438adfcc720a4ffdb
   - enabled: 1
     path: Assets/Scenes/Komik Panel.unity
     guid: 05c29af1154aab04c843b127937e9f63
