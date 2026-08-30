@@ -13,8 +13,8 @@ public class MainMenu_Manager : MonoBehaviour
         SceneManager.LoadScene(gameSceneName);
     }
 
-    public void QuitGame()
+    public void KeluarFullscreen()
     {
-        Application.Quit();
+        Screen.fullScreen = false;
     }
 }
